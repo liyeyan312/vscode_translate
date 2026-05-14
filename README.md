@@ -2,7 +2,7 @@
 
 ![Version](https://img.shields.io/badge/version-0.0.9-blue)
 ![VS Code](https://img.shields.io/badge/VS%20Code-%5E1.90.0-007ACC)
-![License](https://img.shields.io/badge/license-TBD-lightgrey)
+![License](https://img.shields.io/badge/license-MIT-green)
 
 LLM Comment Translator 是一个 VS Code及其兼容/衍生编辑器（例如 Cursor、CodeBuddy、Trae 等）的中文翻译扩展，用于通过 OpenAI-compatible Chat Completions API 将选中的文本，尤其是代码注释，翻译成简体中文。
 
@@ -220,4 +220,4 @@ npm test
 
 ## 许可证
 
-当前还没有选择许可证。正式开源发布前，建议添加 `LICENSE` 文件。
+本项目基于 [MIT License](./LICENSE) 开源。
