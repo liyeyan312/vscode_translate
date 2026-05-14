@@ -1,0 +1,82 @@
+{
+  "name": "llm-comment-translator",
+  "displayName": "LLM Comment Translator",
+  "description": "Translate selected text or comments into Chinese with an OpenAI-compatible LLM API.",
+  "version": "0.0.9",
+  "publisher": "local",
+  "icon": "images/icon.png",
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onCommand:llmTranslate.insertBelow",
+    "onCommand:llmTranslate.showResult"
+  ],
+  "main": "./out/src/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "llmTranslate.insertBelow",
+        "title": "LLM Translate: Insert Chinese Translation Below"
+      },
+      {
+        "command": "llmTranslate.showResult",
+        "title": "LLM Translate: Show Chinese Translation"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "llmTranslate.insertBelow",
+        "key": "ctrl+alt+t",
+        "mac": "cmd+alt+t",
+        "when": "editorTextFocus && editorHasSelection"
+      },
+      {
+        "command": "llmTranslate.showResult",
+        "key": "ctrl+alt+shift+t",
+        "mac": "cmd+alt+shift+t",
+        "when": "editorTextFocus && editorHasSelection"
+      }
+    ],
+    "configuration": {
+      "title": "LLM Translate",
+      "properties": {
+        "llmTranslate.baseUrl": {
+          "type": "string",
+          "default": "https://token-plan-cn.xiaomimimo.com/v1",
+          "description": "OpenAI-compatible API base URL."
+        },
+        "llmTranslate.apiKey": {
+          "type": "string",
+          "default": "",
+          "description": "API key for the OpenAI-compatible service."
+        },
+        "llmTranslate.model": {
+          "type": "string",
+          "default": "MiMo-V2.5",
+          "description": "Model name used for translation."
+        },
+        "llmTranslate.temperature": {
+          "type": "number",
+          "default": 0.2,
+          "minimum": 0,
+          "maximum": 2,
+          "description": "Sampling temperature for translation."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "test": "npm run compile && node --test out/test/**/*.test.js"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.10",
+    "@types/vscode": "^1.90.0",
+    "typescript": "^5.5.4"
+  }
+}
