@@ -162,10 +162,11 @@ export function renderTranslationWebviewHtml(input: TranslationWebviewInput): st
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
-      justify-content: flex-end;
+      justify-content: flex-start;
       align-items: center;
-      padding: 14px 22px;
-      border-top: 1px solid var(--vscode-panel-border);
+      margin: 0 0 14px;
+      padding: 0 0 14px;
+      border-bottom: 1px solid var(--vscode-panel-border);
       background: var(--vscode-sideBar-background);
     }
 
@@ -201,7 +202,7 @@ export function renderTranslationWebviewHtml(input: TranslationWebviewInput): st
     }
 
     .status {
-      margin-right: auto;
+      min-width: 54px;
       color: var(--vscode-descriptionForeground);
       font-size: 12px;
     }
@@ -210,7 +211,6 @@ export function renderTranslationWebviewHtml(input: TranslationWebviewInput): st
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      margin-right: auto;
       color: var(--vscode-descriptionForeground);
       font-size: 12px;
     }
@@ -246,6 +246,18 @@ export function renderTranslationWebviewHtml(input: TranslationWebviewInput): st
     </header>
 
     <section class="content">
+      <div class="actions">
+        <button type="button" data-action="retranslate">重新翻译</button>
+        <button type="button" data-action="copy">复制</button>
+        <button type="button" data-action="replace">替换选中内容</button>
+        <button type="button" class="primary" data-action="insertBelow">插入到下方</button>
+        <span id="status" class="status" aria-live="polite"></span>
+        <span id="loading" class="loading" hidden aria-live="polite">
+          <span class="spinner" aria-hidden="true"></span>
+          正在重新翻译...
+        </span>
+      </div>
+
       <div class="section">
         <h2 class="section-title">译文</h2>
         <textarea id="translation" class="translation" spellcheck="false">${translatedText}</textarea>
@@ -256,18 +268,6 @@ export function renderTranslationWebviewHtml(input: TranslationWebviewInput): st
         <pre class="source">${selectedText}</pre>
       </details>
     </section>
-
-    <footer class="actions">
-      <span id="status" class="status" aria-live="polite"></span>
-      <span id="loading" class="loading" hidden aria-live="polite">
-        <span class="spinner" aria-hidden="true"></span>
-        正在重新翻译...
-      </span>
-      <button type="button" data-action="retranslate">重新翻译</button>
-      <button type="button" data-action="copy">复制</button>
-      <button type="button" data-action="replace">替换选中内容</button>
-      <button type="button" class="primary" data-action="insertBelow">插入到下方</button>
-    </footer>
   </main>
 
   <script nonce="${input.nonce}">

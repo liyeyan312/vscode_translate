@@ -11,7 +11,8 @@ const baseConfig: TranslateConfig = {
   baseUrl: "https://example.test/v1",
   apiKey: "secret-key",
   model: "MiMo-V2.5",
-  temperature: 0.2
+  temperature: 0.2,
+  customInstructions: ""
 };
 
 describe("translator", () => {
@@ -31,6 +32,31 @@ describe("translator", () => {
 
     assert.match(messages[0].content, /简洁/);
     assert.match(messages[0].content, /压缩冗余表达/);
+  });
+
+  it("buildTranslateMessages appends custom instructions when configured", () => {
+    const messages = buildTranslateMessages(
+      "// Retry failed request when token expires",
+      "technical",
+      "保留 React Hook、Promise 和 callback 等英文术语。"
+    );
+
+    assert.match(messages[0].content, /保留 React Hook、Promise 和 callback 等英文术语/);
+    assert.ok(
+      messages[0].content.indexOf("技术注释风格") <
+        messages[0].content.indexOf("保留 React Hook、Promise 和 callback 等英文术语")
+    );
+    assert.ok(
+      messages[0].content.indexOf("保留 React Hook、Promise 和 callback 等英文术语") <
+        messages[0].content.indexOf("只输出翻译结果")
+    );
+  });
+
+  it("buildTranslateMessages ignores blank custom instructions", () => {
+    const defaultMessages = buildTranslateMessages("// Retry failed request when token expires", "technical");
+    const blankMessages = buildTranslateMessages("// Retry failed request when token expires", "technical", "   ");
+
+    assert.deepEqual(blankMessages, defaultMessages);
   });
 
   it("translateToChinese sends an OpenAI-compatible chat completions request", async () => {
@@ -54,7 +80,15 @@ describe("translator", () => {
       }), { status: 200 });
     };
 
-    const result = await translateToChinese("// Retry failed request when token expires", baseConfig, "technical", fakeFetch);
+    const result = await translateToChinese(
+      "// Retry failed request when token expires",
+      {
+        ...baseConfig,
+        customInstructions: "保留 React Hook、Promise 和 callback 等英文术语。"
+      },
+      "technical",
+      fakeFetch
+    );
 
     assert.equal(result, "当令牌过期时重试失败的请求");
     assert.equal(requestedUrl, "https://example.test/v1/chat/completions");
@@ -62,7 +96,11 @@ describe("translator", () => {
     assert.deepEqual(requestedBody, {
       model: "MiMo-V2.5",
       temperature: 0.2,
-      messages: buildTranslateMessages("// Retry failed request when token expires", "technical")
+      messages: buildTranslateMessages(
+        "// Retry failed request when token expires",
+        "technical",
+        "保留 React Hook、Promise 和 callback 等英文术语。"
+      )
     });
   });
 

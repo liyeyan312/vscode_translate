@@ -132,7 +132,8 @@ function readConfig(): TranslateConfig {
     baseUrl: config.get<string>("baseUrl", "https://token-plan-cn.xiaomimimo.com/v1"),
     apiKey: config.get<string>("apiKey", ""),
     model: config.get<string>("model", "MiMo-V2.5"),
-    temperature: config.get<number>("temperature", 0.2)
+    temperature: config.get<number>("temperature", 0.2),
+    customInstructions: config.get<string>("customInstructions", "")
   };
 }
 

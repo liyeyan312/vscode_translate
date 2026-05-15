@@ -66,6 +66,18 @@ describe("translation webview", () => {
     assert.match(html, /message\.command === "setTranslation"/);
   });
 
+  it("renders action buttons above the translation editor", () => {
+    const html = renderTranslationWebviewHtml({
+      nonce: "abc123",
+      selectedText: "// Retry failed request",
+      translatedText: "重试失败的请求",
+      style: "technical"
+    });
+
+    assert.ok(html.indexOf('class="actions"') < html.indexOf('id="translation"'));
+    assert.doesNotMatch(html, /<footer class="actions">/);
+  });
+
   it("shows loading state and disables action buttons while retranslating", () => {
     const html = renderTranslationWebviewHtml({
       nonce: "abc123",

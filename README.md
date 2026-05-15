@@ -1,6 +1,6 @@
 # LLM Comment Translator
 
-![Version](https://img.shields.io/badge/version-0.0.9-blue)
+![Version](https://img.shields.io/badge/version-0.0.11-blue)
 ![VS Code](https://img.shields.io/badge/VS%20Code-%5E1.90.0-007ACC)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
@@ -22,6 +22,7 @@ LLM Comment Translator 是一个 VS Code及其兼容/衍生编辑器（例如 Cu
   - 自然中文
   - 保留英文术语
   - 口语化
+- 支持通过 VS Code 设置追加个性化翻译要求。
 - 插入译文时保留常见注释格式：
   - `//`
   - `#`
@@ -61,14 +62,14 @@ LLM Comment Translator 是一个 VS Code及其兼容/衍生编辑器（例如 Cu
 拿到 `.vsix` 文件后，可以通过 VS Code 命令行安装：
 
 ```bash
-code --install-extension llm-comment-translator-0.0.9.vsix --force
+code --install-extension llm-comment-translator-0.0.11.vsix --force
 ```
 
 也可以在 VS Code 界面中安装：
 
 1. 打开扩展面板。
 2. 选择 `Install from VSIX...`。
-3. 选择 `llm-comment-translator-0.0.9.vsix`。
+3. 选择 `llm-comment-translator-0.0.11.vsix`。
 4. 执行 `Developer: Reload Window`，或重启 VS Code。
 
 Cursor、Trae、CodeBuddy 等 VS Code 兼容编辑器通常也支持类似的 `Install from VSIX...` 安装方式。
@@ -82,7 +83,8 @@ Cursor、Trae、CodeBuddy 等 VS Code 兼容编辑器通常也支持类似的 `I
   "llmTranslate.baseUrl": "https://example.com/v1",
   "llmTranslate.apiKey": "YOUR_API_KEY",
   "llmTranslate.model": "YOUR_MODEL_NAME",
-  "llmTranslate.temperature": 0.2
+  "llmTranslate.temperature": 0.2,
+  "llmTranslate.customInstructions": "保留 React Hook、Promise 和 callback 等英文术语。"
 }
 ```
 
@@ -92,6 +94,7 @@ Cursor、Trae、CodeBuddy 等 VS Code 兼容编辑器通常也支持类似的 `I
 | `llmTranslate.apiKey` | 请求使用的 API Key | 空 |
 | `llmTranslate.model` | 翻译使用的模型名称 | `MiMo-V2.5` |
 | `llmTranslate.temperature` | 采样温度 | `0.2` |
+| `llmTranslate.customInstructions` | 追加到翻译提示词中的个性化要求，为空时不生效 | 空 |
 
 扩展会调用：
 
@@ -220,4 +223,4 @@ npm test
 
 ## 许可证
 
-本项目基于 [MIT License](./LICENSE) 开源。
+本项目基于 MIT License 开源，详见仓库中的 `LICENSE` 文件。

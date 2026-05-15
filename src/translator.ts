@@ -8,6 +8,7 @@ export type TranslateConfig = {
   apiKey: string;
   model: string;
   temperature: number;
+  customInstructions: string;
 };
 
 export type TranslateStyle = "technical" | "concise" | "natural" | "termPreserving" | "casual";
@@ -28,17 +29,29 @@ const STYLE_INSTRUCTIONS: Record<TranslateStyle, string> = {
   casual: "采用更口语化的中文表达，适合解释性注释，但不要牺牲准确性。"
 };
 
-export function buildTranslateMessages(text: string, style: TranslateStyle = "technical"): ChatMessage[] {
+export function buildTranslateMessages(
+  text: string,
+  style: TranslateStyle = "technical",
+  customInstructions = ""
+): ChatMessage[] {
+  const customInstructionText = customInstructions.trim();
+  const systemInstructions = [
+    "你是一个专业的软件工程翻译助手。",
+    "把用户选中的文本翻译成简体中文。",
+    "主要场景是代码注释，请保留原意、技术术语、代码标识符、函数名、变量名和格式含义。",
+    STYLE_INSTRUCTIONS[style]
+  ];
+
+  if (customInstructionText) {
+    systemInstructions.push(`用户个性化要求：${customInstructionText}`);
+  }
+
+  systemInstructions.push("只输出翻译结果，不要解释，不要添加 Markdown 代码块。");
+
   return [
     {
       role: "system",
-      content: [
-        "你是一个专业的软件工程翻译助手。",
-        "把用户选中的文本翻译成简体中文。",
-        "主要场景是代码注释，请保留原意、技术术语、代码标识符、函数名、变量名和格式含义。",
-        STYLE_INSTRUCTIONS[style],
-        "只输出翻译结果，不要解释，不要添加 Markdown 代码块。"
-      ].join("")
+      content: systemInstructions.join("")
     },
     {
       role: "user",
@@ -67,7 +80,7 @@ export async function translateToChinese(
     body: JSON.stringify({
       model: config.model,
       temperature: config.temperature,
-      messages: buildTranslateMessages(text, style)
+      messages: buildTranslateMessages(text, style, config.customInstructions)
     })
   });
 
